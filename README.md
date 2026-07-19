@@ -2,6 +2,26 @@
 
 This gem provides a simple and intuitive Ruby API wrapper for interacting with the Semaphore API. With this gem, you can easily send messages, manage accounts, and perform other operations using the Semaphore API.
 
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem "ruby-semaphore"
+```
+
+And then execute:
+
+```bash
+$ bundle
+```
+
+Or install it yourself as:
+
+```bash
+$ gem install ruby-semaphore
+```
+
 ## Usage
 
 - Get your API key from https://semaphore.co/account
@@ -73,23 +93,6 @@ client.messages.send(
   message: '[YOUR MESSAGE]',
   number: '[NUMBER]'
 )
-```
-
-## Installation
-Add this line to your application's Gemfile:
-
-```ruby
-gem "ruby-semaphore"
-```
-
-And then execute:
-```bash
-$ bundle
-```
-
-Or install it yourself as:
-```bash
-$ gem install ruby-semaphore
 ```
 
 ## Development
