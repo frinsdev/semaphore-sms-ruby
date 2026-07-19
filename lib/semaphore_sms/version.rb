@@ -1,3 +1,3 @@
 module SemaphoreSMS
-  VERSION = '2.1.3'.freeze
+  VERSION = '2.1.5'.freeze
 end
