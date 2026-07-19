@@ -68,7 +68,22 @@ jobs:
           git add lib/semaphore_sms/version.rb Gemfile.lock
           git diff --cached --quiet || git commit -m "chore: bump version to ${{ steps.version.outputs.version }}"
 
+      - name: Check if version already published
+        id: published
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          url="https://rubygems.org/api/v2/rubygems/semaphore-sms-ruby/versions/${VERSION}.json"
+          if curl -sfL "$url" >/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "semaphore-sms-ruby ${VERSION} is already on RubyGems.org; skipping gem push."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Push gem to RubyGems.org
+        if: steps.published.outputs.exists != 'true'
         uses: rubygems/release-gem@v1
 
       - name: Sync version bump to main
