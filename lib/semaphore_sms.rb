@@ -1,14 +1,14 @@
 require 'faraday'
 
-require_relative 'semaphore/http'
-require_relative 'semaphore/resources/messages'
-require_relative 'semaphore/resources/priority'
-require_relative 'semaphore/resources/otp'
-require_relative 'semaphore/resources/account'
-require_relative 'semaphore/client'
-require_relative 'semaphore/version'
+require_relative 'semaphore_sms/http'
+require_relative 'semaphore_sms/resources/messages'
+require_relative 'semaphore_sms/resources/priority'
+require_relative 'semaphore_sms/resources/otp'
+require_relative 'semaphore_sms/resources/account'
+require_relative 'semaphore_sms/client'
+require_relative 'semaphore_sms/version'
 
-module Semaphore
+module SemaphoreSMS
   class Error < StandardError; end
   class ConfigurationError < Error; end
 
@@ -48,7 +48,7 @@ module Semaphore
   end
 
   def self.configuration
-    @configuration ||= Semaphore::Configuration.new
+    @configuration ||= SemaphoreSMS::Configuration.new
   end
 
   def self.configure

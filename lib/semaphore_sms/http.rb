@@ -1,4 +1,4 @@
-module Semaphore
+module SemaphoreSMS
   module HTTP
     def post_request(path:, parameters: {})
       conn.post(uri(path:)) do |req|

@@ -2,12 +2,14 @@
 
 This gem provides a simple and intuitive Ruby API wrapper for interacting with the Semaphore API. With this gem, you can easily send messages, manage accounts, and perform other operations using the Semaphore API.
 
+> **Note:** This gem has been renamed from `ruby-semaphore` to `semaphore-sms-ruby`, and the client namespace is now `SemaphoreSMS` (previously `Semaphore`). Update your Gemfile and code accordingly if you were using the previous names.
+
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "ruby-semaphore"
+gem "semaphore-sms-ruby"
 ```
 
 And then execute:
@@ -19,7 +21,7 @@ $ bundle
 Or install it yourself as:
 
 ```bash
-$ gem install ruby-semaphore
+$ gem install semaphore-sms-ruby
 ```
 
 ## Usage
@@ -31,7 +33,7 @@ $ gem install ruby-semaphore
 For a quick test you can pass your token directly to a new client:
 
 ```rb
-client = Semaphore::Client.new(api_key: '[API KEY]', sender_name: '[SENDER NAME]')
+client = SemaphoreSMS::Client.new(api_key: '[API KEY]', sender_name: '[SENDER NAME]')
 
 # Sending a message
 client.messages.send(
@@ -73,12 +75,12 @@ client.account.users
 
 ### Using Config
 
-To enhance your setup, you can configure the gem with your API keys in a more secure manner, such as in an semaphore.rb initializer file. This approach prevents hardcoding secrets directly into your codebase. Instead, consider using a gem like [dotenv](https://github.com/motdotla/dotenv) to safely pass the keys into your environments.
+To enhance your setup, you can configure the gem with your API keys in a more secure manner, such as in a `semaphore_sms.rb` initializer file. This approach prevents hardcoding secrets directly into your codebase. Instead, consider using a gem like [dotenv](https://github.com/motdotla/dotenv) to safely pass the keys into your environments.
 
 ```rb
-# config/initializers/semaphore.rb
+# config/initializers/semaphore_sms.rb
 
-Semaphore.configure do |config|
+SemaphoreSMS.configure do |config|
   config.api_key = ENV.fetch("SEMAPHORE_API_KEY")
   config.sender_name = ENV.fetch("SEMAPHORE_SENDERNAME")
 end
@@ -87,7 +89,7 @@ end
 After configuring the API key, you can simply create a new client:
 
 ```rb
-client = Semaphore::Client.new
+client = SemaphoreSMS::Client.new
 
 client.messages.send(
   message: '[YOUR MESSAGE]',
@@ -106,7 +108,7 @@ bundle exec rake rubocop
 
 ## Contributing
 
-Contributions are welcome! Please follow the guidelines outlined in the [CONTRIBUTING.md](https://github.com/princekarlo-bootyard/ruby-semaphore/blob/main/CONTRIBUTING.md) file.
+Contributions are welcome! Please follow the guidelines outlined in the [CONTRIBUTING.md](https://github.com/frinsdev/ruby-semaphore-sms/blob/main/CONTRIBUTING.md) file.
 
 ## License
 

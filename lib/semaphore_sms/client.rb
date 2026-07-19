@@ -1,6 +1,6 @@
-module Semaphore
+module SemaphoreSMS
   class Client
-    include Semaphore::HTTP
+    include SemaphoreSMS::HTTP
 
     CONFIG_KEYS = %i[
       api_version
@@ -14,7 +14,7 @@ module Semaphore
 
     def initialize(config = {})
       CONFIG_KEYS.each do |key|
-        instance_variable_set("@#{key}", config[key] || Semaphore.configuration.send(key))
+        instance_variable_set("@#{key}", config[key] || SemaphoreSMS.configuration.send(key))
       end
     end
 

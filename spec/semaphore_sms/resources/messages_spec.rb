@@ -1,7 +1,7 @@
-RSpec.describe Semaphore::Resources::Messages do
+RSpec.describe SemaphoreSMS::Resources::Messages do
   subject(:messages) { client.messages }
 
-  let(:client) { Semaphore::Client.new(api_key: 'test-api-key', sender_name: 'TestSender') }
+  let(:client) { SemaphoreSMS::Client.new(api_key: 'test-api-key', sender_name: 'TestSender') }
   let(:base_url) { 'https://api.semaphore.co/api/v4' }
 
   describe '#send' do

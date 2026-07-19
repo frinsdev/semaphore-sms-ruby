@@ -1,2 +1,2 @@
-require_relative '../semaphore'
-require_relative '../semaphore/compatibility'
+require_relative '../semaphore_sms'
+require_relative '../semaphore_sms/compatibility'

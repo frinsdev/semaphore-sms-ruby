@@ -1,4 +1,4 @@
-module Semaphore
+module SemaphoreSMS
   module Resources
     class Priority
       def initialize(client)

@@ -1,4 +1,4 @@
-module Semaphore
+module SemaphoreSMS
   module Resources
     class Messages
       def initialize(client)
