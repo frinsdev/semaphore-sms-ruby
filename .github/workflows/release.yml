@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          fetch-depth: 0
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -33,19 +33,64 @@ jobs:
           ruby-version: '4.0'
           bundler-cache: true
 
-      - name: Verify tag matches gem version
+      - name: Set version from tag
+        id: version
         run: |
           set -euo pipefail
-          tag="${GITHUB_REF_NAME#v}"
-          version="$(ruby -r ./lib/semaphore_sms/version.rb -e 'print SemaphoreSMS::VERSION')"
-          if [ "$tag" != "$version" ]; then
-            echo "Tag v${tag} does not match SemaphoreSMS::VERSION (${version})." >&2
+          version="${GITHUB_REF_NAME#v}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Tag '${GITHUB_REF_NAME}' is not a valid version tag (expected vMAJOR.MINOR.PATCH)." >&2
             exit 1
           fi
+
+          ruby -e '
+            path = "lib/semaphore_sms/version.rb"
+            version = ARGV.fetch(0)
+            contents = File.read(path)
+            updated = contents.sub(/VERSION = '\''[^'\'']*'\''/, "VERSION = '\''#{version}'\''")
+            abort "Failed to update VERSION in #{path}" if updated == contents && !contents.include?("'#{version}'")
+            File.write(path, updated)
+          ' "$version"
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "Releasing semaphore-sms-ruby ${version} from tag ${GITHUB_REF_NAME}"
 
       - name: Run specs
         run: bundle exec rake spec
 
+      - name: Commit version for release build
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/semaphore_sms/version.rb
+          git diff --cached --quiet || git commit -m "chore: bump version to ${{ steps.version.outputs.version }}"
+
       - name: Push gem to RubyGems.org
         uses: rubygems/release-gem@v1
+
+      - name: Sync version bump to main
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git checkout -B main origin/main
+
+          ruby -e '
+            path = "lib/semaphore_sms/version.rb"
+            version = ARGV.fetch(0)
+            contents = File.read(path)
+            updated = contents.sub(/VERSION = '\''[^'\'']*'\''/, "VERSION = '\''#{version}'\''")
+            abort "Failed to update VERSION in #{path}" if updated == contents && !contents.include?("'#{version}'")
+            File.write(path, updated)
+          ' "$VERSION"
+
+          git add lib/semaphore_sms/version.rb
+          if git diff --cached --quiet; then
+            echo "main already at ${VERSION}"
+            exit 0
+          fi
+
+          git commit -m "chore: bump version to ${VERSION} [skip ci]"
+          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" main
