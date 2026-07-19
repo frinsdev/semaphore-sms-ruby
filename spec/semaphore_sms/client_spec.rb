@@ -1,22 +1,22 @@
-RSpec.describe Semaphore::Client do
+RSpec.describe SemaphoreSMS::Client do
   subject(:client) do
     described_class.new(api_key: 'test-api-key', sender_name: 'TestSender')
   end
 
   it 'exposes a messages resource' do
-    expect(client.messages).to be_a(Semaphore::Resources::Messages)
+    expect(client.messages).to be_a(SemaphoreSMS::Resources::Messages)
   end
 
   it 'exposes a priority resource' do
-    expect(client.priority).to be_a(Semaphore::Resources::Priority)
+    expect(client.priority).to be_a(SemaphoreSMS::Resources::Priority)
   end
 
   it 'exposes an otp resource' do
-    expect(client.otp).to be_a(Semaphore::Resources::Otp)
+    expect(client.otp).to be_a(SemaphoreSMS::Resources::Otp)
   end
 
   it 'exposes an account resource' do
-    expect(client.account).to be_a(Semaphore::Resources::Account)
+    expect(client.account).to be_a(SemaphoreSMS::Resources::Account)
   end
 
   it 'memoizes resource instances' do

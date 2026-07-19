@@ -1,5 +1,5 @@
 require 'webmock/rspec'
-require 'ruby/semaphore'
+require 'semaphore_sms'
 
 WebMock.disable_net_connect!(allow_localhost: true)
 

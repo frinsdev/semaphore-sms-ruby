@@ -1,3 +1,3 @@
-module Semaphore
+module SemaphoreSMS
   VERSION = '2.0.0'.freeze
 end

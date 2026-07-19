@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ruby-semaphore (2.0.0)
+    semaphore-sms-ruby (2.0.0)
       faraday (~> 2.12)
 
 GEM
@@ -94,8 +94,8 @@ DEPENDENCIES
   rubocop (~> 1.75)
   rubocop-rake (~> 0.7)
   rubocop-rspec (~> 3.5)
-  ruby-semaphore!
+  semaphore-sms-ruby!
   webmock (~> 3.23)
 
 BUNDLED WITH
-   4.0.16
+  4.0.16
