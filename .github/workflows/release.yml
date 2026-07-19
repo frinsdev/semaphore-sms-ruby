@@ -33,6 +33,9 @@ jobs:
           ruby-version: '4.0'
           bundler-cache: true
 
+      - name: Run specs
+        run: bundle exec rake spec
+
       - name: Set version from tag
         id: version
         run: |
@@ -52,17 +55,17 @@ jobs:
             File.write(path, updated)
           ' "$version"
 
+          # Path gem version is recorded in Gemfile.lock; refresh it after the bump.
+          BUNDLE_FROZEN=false bundle lock
+
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "Releasing semaphore-sms-ruby ${version} from tag ${GITHUB_REF_NAME}"
-
-      - name: Run specs
-        run: bundle exec rake spec
 
       - name: Commit version for release build
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add lib/semaphore_sms/version.rb
+          git add lib/semaphore_sms/version.rb Gemfile.lock
           git diff --cached --quiet || git commit -m "chore: bump version to ${{ steps.version.outputs.version }}"
 
       - name: Push gem to RubyGems.org
@@ -86,7 +89,9 @@ jobs:
             File.write(path, updated)
           ' "$VERSION"
 
-          git add lib/semaphore_sms/version.rb
+          BUNDLE_FROZEN=false bundle lock
+
+          git add lib/semaphore_sms/version.rb Gemfile.lock
           if git diff --cached --quiet; then
             echo "main already at ${VERSION}"
             exit 0
