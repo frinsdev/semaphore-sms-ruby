@@ -74,7 +74,7 @@ jobs:
       - name: Sync version bump to main
         env:
           VERSION: ${{ steps.version.outputs.version }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PUSH_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           git fetch origin main
@@ -98,4 +98,4 @@ jobs:
           fi
 
           git commit -m "chore: bump version to ${VERSION} [skip ci]"
-          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" main
+          git push "https://x-access-token:${GH_PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" main
