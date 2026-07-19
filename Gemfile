@@ -4,5 +4,11 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Specify your gem's dependencies in ruby-semaphore.gemspec.
 gemspec
 
-# Start debugger with binding.b [https://github.com/ruby/debug]
-# gem "debug", ">= 1.0.0"
+group :development, :test do
+  gem 'rake', '~> 13.0'
+  gem 'rspec', '~> 3.13'
+  gem 'rubocop', '~> 1.75'
+  gem 'rubocop-rake', '~> 0.7'
+  gem 'rubocop-rspec', '~> 3.5'
+  gem 'webmock', '~> 3.23'
+end

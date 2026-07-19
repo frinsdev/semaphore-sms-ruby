@@ -1,8 +1,12 @@
 require 'faraday'
 
 require_relative 'semaphore/http'
+require_relative 'semaphore/resources/messages'
+require_relative 'semaphore/resources/priority'
+require_relative 'semaphore/resources/otp'
+require_relative 'semaphore/resources/account'
 require_relative 'semaphore/client'
-require_relative "semaphore/version"
+require_relative 'semaphore/version'
 
 module Semaphore
   class Error < StandardError; end

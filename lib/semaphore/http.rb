@@ -15,7 +15,7 @@ module Semaphore
     private
 
     def configure_request_params(req, parameters)
-      req_parameters = parameters
+      req_parameters = parameters.dup
       req_parameters[:apikey] = @api_key
       req_parameters[:sender_name] = @sender_name
       req.params = req_parameters
