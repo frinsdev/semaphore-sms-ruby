@@ -18,36 +18,20 @@ module Semaphore
       end
     end
 
-    def messages(parameters: {})
-      post_request(path: '/messages', parameters:)
+    def messages
+      @messages ||= Resources::Messages.new(self)
     end
 
-    def priority(parameters: {})
-      post_request(path: '/priority', parameters:)
+    def priority
+      @priority ||= Resources::Priority.new(self)
     end
 
-    def otp(parameters: {})
-      post_request(path: '/otp', parameters:)
+    def otp
+      @otp ||= Resources::Otp.new(self)
     end
 
-    def get_message(id, parameters: {})
-      get_request(path: "/messages/#{id}", parameters:)
-    end
-
-    def account(parameters: {})
-      get_request(path: '/account', parameters:)
-    end
-
-    def account_transactions(parameters: {})
-      get_request(path: '/account/transactions', parameters:)
-    end
-
-    def account_sendernames(parameters: {})
-      get_request(path: '/account/sendernames', parameters:)
-    end
-
-    def account_users(parameters: {})
-      get_request(path: '/account/users', parameters:)
+    def account
+      @account ||= Resources::Account.new(self)
     end
   end
 end

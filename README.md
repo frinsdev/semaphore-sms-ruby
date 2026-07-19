@@ -11,32 +11,44 @@ This gem provides a simple and intuitive Ruby API wrapper for interacting with t
 For a quick test you can pass your token directly to a new client:
 
 ```rb
-semaphore = Semaphore::Client.new(api_key: '[API KEY]', sender_name: '[SENDER NAME]')
+client = Semaphore::Client.new(api_key: '[API KEY]', sender_name: '[SENDER NAME]')
 
 # Sending a message
-semaphore.messages(
-  parameters: {
-    message: '[YOUR MESSAGE]',
-    number: '[NUMBER]'
-  }
+client.messages.send(
+  message: '[YOUR MESSAGE]',
+  number: '[NUMBER]'
 )
 
-# Sending a Bulk Message
-semaphore.messages(
-  parameters: {
-    message: '[YOUR MESSAGE]',
-    number: '[NUMBER], [NUMBER], [NUMBER], [NUMBER]' # Comma separated
-  }
+# Sending a bulk message
+client.messages.bulk_send(
+  message: '[YOUR MESSAGE]',
+  numbers: ['NUMBER', 'NUMBER', 'NUMBER', 'NUMBER']
+)
+
+# Sending a priority message
+client.priority.send(
+  message: '[YOUR MESSAGE]',
+  number: '[NUMBER]'
 )
 
 # Sending an OTP
-semaphore.otp(
-  parameters: {
-    message: 'Thanks for registering. Your OTP Code is {otp}.',
-    number: '[NUMBER]',
-    code: 1234
-  }
+client.otp.send(
+  message: 'Thanks for registering. Your OTP Code is {otp}.',
+  number: '[NUMBER]',
+  code: 1234
 )
+
+# Retrieving a message
+client.messages.retrieve(123)
+
+# Listing messages
+client.messages.list(limit: 100, page: 1)
+
+# Account
+client.account.retrieve
+client.account.transactions(limit: 100, page: 1)
+client.account.sender_names
+client.account.users
 ```
 
 ### Using Config
@@ -55,11 +67,11 @@ end
 After configuring the API key, you can simply create a new client:
 
 ```rb
-Semaphore::Client.new.messages(
-  parameters: {
-    message: '[YOUR MESSAGE]',
-    number: '[NUMBER]'
-  }
+client = Semaphore::Client.new
+
+client.messages.send(
+  message: '[YOUR MESSAGE]',
+  number: '[NUMBER]'
 )
 ```
 
@@ -78,6 +90,15 @@ $ bundle
 Or install it yourself as:
 ```bash
 $ gem install ruby-semaphore
+```
+
+## Development
+
+```bash
+bundle install
+bundle exec rake        # specs + rubocop
+bundle exec rake spec
+bundle exec rake rubocop
 ```
 
 ## Contributing
