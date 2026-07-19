@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Push gem to RubyGems.org
+    runs-on: ubuntu-latest
+    environment: release
+
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0'
+          bundler-cache: true
+
+      - name: Verify tag matches gem version
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(ruby -r ./lib/semaphore_sms/version.rb -e 'print SemaphoreSMS::VERSION')"
+          if [ "$tag" != "$version" ]; then
+            echo "Tag v${tag} does not match SemaphoreSMS::VERSION (${version})." >&2
+            exit 1
+          fi
+          echo "Releasing semaphore-sms-ruby ${version} from tag ${GITHUB_REF_NAME}"
+
+      - name: Run specs
+        run: bundle exec rake spec
+
+      - name: Push gem to RubyGems.org
+        uses: rubygems/release-gem@v1
