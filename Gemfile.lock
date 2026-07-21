@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    semaphore-sms-ruby (2.1.5)
+    semaphore-sms-ruby (2.1.6)
       faraday (~> 2.12)
 
 GEM
